@@ -5,8 +5,6 @@ import { useTruncate } from "./utils/useTruncate";
 export default function Home() {
   const { containerRef, truncatedText } = useTruncate("Скидки и акции от продавцов", 2);
 
-  console.log(truncatedText)
-
   return (
     <>
       <p>Пример решения</p>
