@@ -1,13 +1,11 @@
-import { getAverageCharWidth } from "./getAverageCharWidth";
-
 const WHITESPACE_RE = /\s/;
 
-export function getSlicedText(text: string, containerWidth: number, maxLines: number, element: HTMLElement) {
+export function getSlicedText(text: string, containerWidth: number, maxLines: number, charWidthMap: Map<string, number>) {
   let lineWidth = 0;
   const widthsByLines = []
 
   for (let i = 0; i < text.length; i++) {
-    const charWidth = getAverageCharWidth(text[i], element); // TODO: optimize
+    const charWidth = charWidthMap.get(text[i])!;
 
     if (lineWidth + charWidth <= containerWidth) {
       lineWidth += charWidth;

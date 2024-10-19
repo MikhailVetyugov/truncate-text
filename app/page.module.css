@@ -6,12 +6,10 @@
 }
 
 .container > * {
-  overflow: hidden;
   /* Change the font to "Times New Roman" or comment to fix. */
   font-family: Arial;
   font-size: 24px;
   line-height: 1.33;
-  word-wrap: break-word;
 }
 
 .text {
@@ -20,4 +18,5 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  word-wrap: break-word;
 }

@@ -1,20 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 
-import { getAverageCharWidth } from './getAverageCharWidth';
 import { getSlicedText } from "./getSlicedText";
+import { getCharWidths } from "./getCharWidths";
 
 export const useTruncate = (text: string, linesCount: number) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [truncatedText, setTruncatedText] = useState(text);
 
-  // TODO: Как у Циан в разметке с сервера?
   useEffect(() => {
     if (containerRef.current) {
+      const charWidthMap = getCharWidths(text, containerRef.current);
+
       const containerWidth = containerRef.current.offsetWidth;
-      const { slicedText, widthsByLines } = getSlicedText(text, containerWidth, linesCount, containerRef.current);
+      const { slicedText, widthsByLines } = getSlicedText(text, containerWidth, linesCount, charWidthMap);
       
       if (text.length > slicedText.length) {
-        const dotCharWidth = getAverageCharWidth('.', containerRef.current);
+        const dotCharWidth = charWidthMap.get('.')!;
         const threeDotsWidth = dotCharWidth * 3;
 
         const lastLineWidth = widthsByLines[linesCount - 1];
