@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 
 import { getSlicedText } from "./getSlicedText";
 import { getCharWidths } from "./getCharWidths";
 
+// Если поставлять компонент, под капотом которого используется хук, то придется решать проблему
+// передачи туда контента вроде <h1>Test<span>Span</span></h1>, что усложнит реализацию.
 export const useTruncate = (text: string, linesCount: number) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [truncatedText, setTruncatedText] = useState(text);
@@ -32,5 +34,15 @@ export const useTruncate = (text: string, linesCount: number) => {
     }
   }, [text, linesCount]);
 
-  return { truncatedText, containerRef };
+  const fallbackStyle = useMemo<CSSProperties>(() => ({
+    // Фоллбэк для SSR.
+    display: '-webkit-box',
+    WebkitLineClamp: linesCount,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    wordWrap: 'break-word',
+    }), [linesCount]);
+
+  return { truncatedText, containerRef, fallbackStyle };
 };
